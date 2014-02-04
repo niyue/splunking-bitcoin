@@ -12,6 +12,7 @@ import com.google.bitcoin.core.Sha256Hash;
 import com.google.bitcoin.core.StoredBlock;
 import com.google.bitcoin.core.Transaction;
 import com.google.bitcoin.core.VerificationException;
+import com.google.bitcoin.store.FullPrunedBlockStore;
 import com.splunk.demojam.bitcoin.events.ReceivingTransactionEvent;
 import com.splunk.demojam.bitcoin.events.ReorganizingBlockChainEvent;
 import com.splunk.demojam.bitcoin.events.StoredBlockEvent;
@@ -19,8 +20,17 @@ import com.splunk.demojam.bitcoin.events.StoredBlockEvent;
 public class LoggingBlockChainListener implements BlockChainListener {
 	private static final Logger logger = LoggerFactory.getLogger(LoggingBlockChainListener.class);
 	private final BlockChainEventLogger eventLogger = new BlockChainEventLogger(logger);
+	private final FullPrunedBlockStore blockStore;
 	
 	private int txCount = 0;
+	
+	public LoggingBlockChainListener() {
+		this(null);
+	}
+	
+	public LoggingBlockChainListener(FullPrunedBlockStore blockStore) {
+		this.blockStore = blockStore;
+	}
 	
 	@Override
 	public void notifyNewBestBlock(StoredBlock block)
@@ -45,7 +55,7 @@ public class LoggingBlockChainListener implements BlockChainListener {
 			NewBlockType blockType, int relativityOffset)
 			throws VerificationException {
 		txCount++;
-		eventLogger.log(new ReceivingTransactionEvent(tx, block, blockType, relativityOffset));
+		eventLogger.log(new ReceivingTransactionEvent(tx, block, blockType, relativityOffset, blockStore));
 	}
 
 	@Override

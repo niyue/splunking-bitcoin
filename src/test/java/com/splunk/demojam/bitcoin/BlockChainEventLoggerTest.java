@@ -20,8 +20,8 @@ import com.google.bitcoin.discovery.DnsDiscovery;
 import com.google.bitcoin.params.MainNetParams;
 import com.google.bitcoin.store.BlockStore;
 import com.google.bitcoin.store.FullPrunedBlockStore;
+import com.google.bitcoin.store.H2FullPrunedBlockStore;
 import com.google.bitcoin.store.MemoryBlockStore;
-import com.google.bitcoin.store.MemoryFullPrunedBlockStore;
 import com.google.bitcoin.utils.BriefLogFormatter;
 import com.splunk.demojam.bitcoin.events.BlockChainEvent;
 import com.splunk.demojam.bitcoin.events.ReceivingTransactionEvent;
@@ -61,10 +61,10 @@ public class BlockChainEventLoggerTest {
 	public void testLogTransaction() throws Exception {
 		BriefLogFormatter.init();
 
-		// FullPrunedBlockStore blockStore = new H2FullPrunedBlockStore(params, "data/bitcoin-blocks.db", 500000);
-		// FullPrunedBlockChain blockChain = new FullPrunedBlockChain(params,  blockStore);
-		FullPrunedBlockStore blockStore = new MemoryFullPrunedBlockStore(params, 500000);
+		FullPrunedBlockStore blockStore = new H2FullPrunedBlockStore(params, "data/bitcoin-blocks.db", 500000);
 		FullPrunedBlockChain blockChain = new FullPrunedBlockChain(params,  blockStore);
+		// FullPrunedBlockStore blockStore = new MemoryFullPrunedBlockStore(params, 500000);
+		// FullPrunedBlockChain blockChain = new FullPrunedBlockChain(params,  blockStore);
         PeerGroup peerGroup = new PeerGroup(params, blockChain);
         
         peerGroup = new PeerGroup(params, null);

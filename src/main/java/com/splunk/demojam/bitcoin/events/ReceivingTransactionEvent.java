@@ -10,8 +10,10 @@ import org.slf4j.LoggerFactory;
 
 import com.google.bitcoin.core.AbstractBlockChain.NewBlockType;
 import com.google.bitcoin.core.ScriptException;
+import com.google.bitcoin.core.Sha256Hash;
 import com.google.bitcoin.core.StoredBlock;
 import com.google.bitcoin.core.StoredTransactionOutput;
+import com.google.bitcoin.core.StoredUndoableBlock;
 import com.google.bitcoin.core.Transaction;
 import com.google.bitcoin.core.TransactionInput;
 import com.google.bitcoin.core.TransactionOutPoint;
@@ -30,6 +32,8 @@ public class ReceivingTransactionEvent implements BlockChainEvent {
 	private final int relativityOffset;
 	private FullPrunedBlockStore blockStore;
 	private final static Logger logger = LoggerFactory.getLogger(ReceivingTransactionEvent.class);
+	private static int outputIndex = 0;
+	private static Sha256Hash lastBlockHash = new Sha256Hash("0000000000000000000000000000000000000000000000000000000000000000");
 	
 	public ReceivingTransactionEvent(Transaction tx, StoredBlock block,
 			NewBlockType blockType, int relativityOffset) {
@@ -37,6 +41,14 @@ public class ReceivingTransactionEvent implements BlockChainEvent {
 		this.block = block;
 		this.blockType = blockType;
 		this.relativityOffset = relativityOffset;
+		if(isTransactionInNewBlock()) {
+			lastBlockHash = block.getHeader().getHash();
+			outputIndex = 0;
+		}
+	}
+	
+	private boolean isTransactionInNewBlock() {
+		return !lastBlockHash.equals(block.getHeader().getHash());
 	}
 	
 	public ReceivingTransactionEvent(Transaction tx, StoredBlock block,
@@ -51,22 +63,22 @@ public class ReceivingTransactionEvent implements BlockChainEvent {
 		for(TransactionInput input : tx.getInputs()) {
 			boolean isCoinBase = input.isCoinBase();
 			String scriptSig = input.getScriptSig().toString();
-			BigInteger outValue = BigInteger.ZERO;
 			TransactionOutPoint out = input.getOutpoint();
-			if(input.getConnectedOutput() != null) {
-				TransactionOutput txOut = input.getConnectedOutput();
-				outValue = txOut.getValue();
-			} else if(blockStore != null) {
+			BigInteger outValue = BigInteger.ZERO;
+			if(blockStore != null && !tx.isCoinBase()) {
 				try {
-					StoredTransactionOutput txOut = blockStore.getTransactionOutput(out.getHash(), out.getIndex());
+					StoredUndoableBlock undoableBlock = blockStore.getUndoBlock(block.getHeader().getHash());
+					List<StoredTransactionOutput> outputs = undoableBlock.getTxOutChanges().txOutsSpent;
+					StoredTransactionOutput txOut = outputs.get(outputIndex);
+					outputIndex++;
 					if(txOut != null) {
 						outValue = txOut.getValue();
 					}
 				} catch (BlockStoreException e) {
 					logger.error("Fail to get transaction output, message={}, cause={}", e.getMessage(), e.getCause());
 				}
+				inValue = inValue.add(outValue);
 			}
-			inValue = inValue.add(outValue);
 			String in = String.format("script-sig=%s, is-coinbase=%s, out-hash=%s, out-index=%s, out-value=%s", scriptSig, isCoinBase, out.getHash(), out.getIndex(), outValue);
 			inputs.add(in);
 		}
