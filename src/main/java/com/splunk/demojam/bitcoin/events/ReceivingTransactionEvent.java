@@ -96,13 +96,13 @@ public class ReceivingTransactionEvent implements BlockChainEvent {
 		}
 		BigInteger transactionFee = inValue.equals(BigInteger.ZERO) ? BigInteger.ZERO : inValue.subtract(outValue);
 		Map<String, ? extends Object> map = ImmutableMap.<String, Object>builder()
+				.put("time", DateFormatter.format((block.getHeader().getTime())))
 				.put("event", "new-transaction")
 				.put("hash", tx.getHashAsString())
 				.put("size", tx.getMessageSize())
 				.put("sig-op-count", tx.getSigOpCount())
 				.put("purpose", tx.getPurpose())
 				.put("version", tx.getVersion())
-				.put("time", DateFormatter.format((block.getHeader().getTime())))
 				.put("is-coinbase", tx.isCoinBase())
 				.put("is-every-output-spent", tx.isEveryOutputSpent())
 				.put("is-mature", tx.isMature())

@@ -16,8 +16,8 @@ public class ReorganizingBlockChainEvent implements BlockChainEvent {
 		StoredBlock oldBlockHead = oldBlocks.get(0);
 		StoredBlock newBlockHead = oldBlocks.get(0);
 		map = ImmutableMap.<String, Object>builder()
-				.put("event", "reorganize-block-chain")
 				.put("time", DateFormatter.format(new Date()))
+				.put("event", "reorganize-block-chain")
 				.put("split-point-height", splitPoint.getHeight())
 				.put("split-point-hash", splitPoint.getHeader().getHashAsString())
 				.put("split-point-time", DateFormatter.format(splitPoint.getHeader().getTime()))

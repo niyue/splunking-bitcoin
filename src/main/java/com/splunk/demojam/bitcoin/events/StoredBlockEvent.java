@@ -20,6 +20,7 @@ public class StoredBlockEvent implements BlockChainEvent {
 	public Map<String, ? extends Object> create() throws VerificationException {
 		Block header = block.getHeader();
 		Map<String, ? extends Object> map = ImmutableMap.<String, Object>builder()
+				.put("time", DateFormatter.format(header.getTime()))
 				.put("event", "new-best-block")
 				.put("hash", header.getHashAsString())
 				.put("height", block.getHeight())
@@ -30,7 +31,6 @@ public class StoredBlockEvent implements BlockChainEvent {
 				.put("difficulty", header.getDifficultyTarget())
 				.put("size", header.getMessageSize())
 				.put("nounce", header.getNonce())
-				.put("time", DateFormatter.format(header.getTime()))
 				.put("version", header.getVersion())
 				.put("work", header.getWork())
 				.put("tx-count", txCount)

@@ -1,26 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <configuration>
-
+	<property name="LOG_DIR" value="${user.home}/dev/projects/workspace/splunking-bitcoin/logs" />
+	
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder 
 			by default -->
 		<encoder>
-			<pattern>%date{ISO8601} %-5level %logger{5} - %msg%n
-			</pattern>
+			<pattern>%-5level %logger{5} - %msg - %date{ISO8601} %n</pattern>
 		</encoder>
 	</appender>
+	
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/blocks.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      		<fileNamePattern>${LOG_DIR}/blocks-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      		<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        		<maxFileSize>1MB</maxFileSize>
+      		</timeBasedFileNamingAndTriggeringPolicy>
+    	</rollingPolicy>
+        <encoder>
+            <pattern>%-5level %logger{5} - %msg - %date{ISO8601} %n</pattern>
+        </encoder>
+    </appender>
 
 	<logger name="com.splunk.demojam" level="DEBUG" additivity="false">
 		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
 	</logger>
 
 	<logger name="com.google.bitcoin.core.MemoryPool" level="WARN" additivity="false">
 		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
 	</logger>
 	
 	<root level="INFO">
 		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
 	</root>
 
 </configuration>
