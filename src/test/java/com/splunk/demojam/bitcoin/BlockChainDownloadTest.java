@@ -19,9 +19,10 @@ public class BlockChainDownloadTest {
 		FullPrunedBlockStore blockStore = new H2FullPrunedBlockStore(netParams, "bitcoin-blocks.db", 500000);
 		FullPrunedBlockChain blockChain = new FullPrunedBlockChain(netParams,  blockStore);
 		PeerGroup peerGroup = new PeerGroup(netParams, blockChain);
-		peerGroup.setUserAgent("Splunk Bitcoin", "0.0.1");
+		peerGroup.setUserAgent("SplunkBitcoin", "0.0.1");
 		peerGroup.addPeerDiscovery(new DnsDiscovery(netParams));
-		peerGroup.startAndWait();
+		peerGroup.startAsync();
 		peerGroup.downloadBlockChain();
+		peerGroup.stopAsync();
 	}
 }

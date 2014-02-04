@@ -26,13 +26,13 @@ public class BlockChainListenerTest {
 		// FullPrunedBlockStore blockStore = new H2FullPrunedBlockStore(netParams, "full-blocks.db", 500000);
 		// FullPrunedBlockChain blockChain = new FullPrunedBlockChain(netParams, Arrays.asList(blockChainListener), blockStore);
 		PeerGroup peerGroup = new PeerGroup(netParams, blockChain);
-		peerGroup.setUserAgent("Splunk Bitcoin", "0.0.1");
+		peerGroup.setUserAgent("SplunkBitcoin", "0.0.1");
 		peerGroup.addPeerDiscovery(new DnsDiscovery(netParams));
 		// the time in official bitcoin bootstrap.dat (uploaded in 2014-01-11)
 		// https://blockchain.info/block-height/279000
 		// DateTime block279000Time = new DateTime(2014, 1, 6, 22, 31, 11);
 		// peerGroup.setFastCatchupTimeSecs(block279000Time.getMillis());
-		peerGroup.startAndWait();
+		peerGroup.startAsync();
 		peerGroup.downloadBlockChain();
 		while(true) {
 			Thread.sleep(1000);
