@@ -14,9 +14,9 @@
 	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_DIR}/blocks.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      		<fileNamePattern>${LOG_DIR}/blocks-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      		<fileNamePattern>${LOG_DIR}/blocks-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
       		<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-        		<maxFileSize>1MB</maxFileSize>
+        		<maxFileSize>512MB</maxFileSize>
       		</timeBasedFileNamingAndTriggeringPolicy>
     	</rollingPolicy>
         <encoder>
