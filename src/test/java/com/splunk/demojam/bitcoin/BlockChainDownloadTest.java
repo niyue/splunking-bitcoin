@@ -5,7 +5,7 @@ import org.junit.Test;
 import com.google.bitcoin.core.FullPrunedBlockChain;
 import com.google.bitcoin.core.NetworkParameters;
 import com.google.bitcoin.core.PeerGroup;
-import com.google.bitcoin.discovery.DnsDiscovery;
+import com.google.bitcoin.net.discovery.DnsDiscovery;
 import com.google.bitcoin.params.MainNetParams;
 import com.google.bitcoin.store.BlockStoreException;
 import com.google.bitcoin.store.FullPrunedBlockStore;
