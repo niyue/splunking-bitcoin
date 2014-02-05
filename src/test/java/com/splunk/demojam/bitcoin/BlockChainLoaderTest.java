@@ -19,9 +19,10 @@ public class BlockChainLoaderTest {
 
 	@Test
 	public void testLoadBootstrapDataFile() throws Exception {
-		FullPrunedBlockStore blockStore = new H2FullPrunedBlockStore(netParams, "data/bitcoinj", 500000);
+		FullPrunedBlockStore blockStore = new H2FullPrunedBlockStore(netParams, "outputs/database/bitcoinj", 500000);
 		BlockChainListener blockChainListener = new LoggingBlockChainListener(blockStore);
 		FullPrunedBlockChain blockChain = new FullPrunedBlockChain(netParams, Arrays.asList(blockChainListener), blockStore);
+		blockChain.setRunScripts(false);
 
 		BlockFileLoader loader = new BlockFileLoader(netParams, Arrays.asList(new File("/Users/sni/Library/Application Support/Bitcoin/bootstrap.dat")));
 
