@@ -1,6 +1,6 @@
 Listening to Bitcoin network with Splunk
 ==============================
-This is a simple system for Splunking Bitcoin network and showing interesting metrics for Bitcoin economy. 
+This is a simple system for [Splunking](http://www.splunk.com) [Bitcoin](https://bitcoin.org/) network and showing interesting metrics for Bitcoin economy. 
 
 It is consisted of two components:
 
@@ -9,12 +9,23 @@ It is consisted of two components:
 
 To set it up (only verified under Mac OS X 10.9):
 
-* git clone the Github repository, let's call the repository folder SPLUNKING_BITCOIN_HOME, and call the SPLUNKING_BITCOIN_HOME/src/vagrant/splunk/assets folder ASSETS folder
-* Download [Splunk](http://www.splunk.com) Linux x64 for RedHat edition and put it under the ASSETS folder
-* Download Bitcoin [bootstrap.dat](http://sourceforge.net/projects/bitcoin/files/Bitcoin/blockchain/) file via BitTorrrent for fast syncing, and put it under ASSETS folder
+* git clone this Github repository
+	* let's call the repository folder SPLUNKING_BITCOIN_HOME
+	* and call the SPLUNKING_BITCOIN_HOME/src/vagrant/splunk/assets folder as ASSETS folder
+* Download [Splunk](http://www.splunk.com/download) 
+	* you need to download the Linux x64 for RedHat edition (an RPM package)
+	* put the downloaded RPM package under the ASSETS folder
+* Download Bitcoin [bootstrap.dat](http://sourceforge.net/projects/bitcoin/files/Bitcoin/blockchain/) file
+	* this is used for fast syncing the block chain
+	* you need to use some BitTorrrent software to download it 
+	* please put it under the ASSETS folder
 * Download and install [Vagrant](http://www.vagrantup.com/)
 * Download and install [Apache Maven](http://maven.apache.org)
-* Enter SPLUNKING_BITCOIN_HOME directory, run "mvn exec:java"
-* Copy your Splunk license file to the ASSETS folder and name it splunk.license
-* Enter SPLUNKING_BITCOIN_HOME/src/vagrant directory, run "vagrant up"
-* That's it, you can use your browser to nagivate to http://192.168.33.2:8089 to use Splunk Web to explore the data
+* Start the Bitcoin node for block chain syncing and listening
+	* Enter SPLUNKING_BITCOIN_HOME directory, run "mvn exec:java"
+* Install Splunk license
+	* Copy your Splunk license file to the ASSETS folder and name it splunk.license
+* Use vagrant to set up the entire environment
+	* Enter SPLUNKING_BITCOIN_HOME/src/vagrant directory, run "vagrant up"
+* That's it
+	* you can use your browser to nagivate to http://192.168.33.2:8000 (admin:999admin) to use Splunk Web to explore the data
