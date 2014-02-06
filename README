@@ -15,7 +15,6 @@ To set it up (only verified under Mac OS X 10.9):
 * Download and install [Vagrant](http://www.vagrantup.com/)
 * Download and install [Apache Maven](http://maven.apache.org)
 * Enter SPLUNKING_BITCOIN_HOME directory, run "mvn exec:java"
-* Create a symbolic link for the folder SPLUNKING_BITCOIN_HOME/target/outputs/logs in ASSETS folder
-	* ln -s ${SPLUNKING_BITCOIN_HOME}/target/outputs/logs ${ASSETS}
+* Copy your Splunk license file to the ASSETS folder and name it splunk.license
 * Enter SPLUNKING_BITCOIN_HOME/src/vagrant directory, run "vagrant up"
 * That's it, you can use your browser to nagivate to http://192.168.33.2:8089 to use Splunk Web to explore the data

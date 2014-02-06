@@ -24,7 +24,7 @@ public class Main {
 	
 	public static void main(String[] args) throws Exception {
 		logger.info("Start to load blocks from bootstrap data file");
-		FullPrunedBlockStore blockStore = new H2FullPrunedBlockStore(netParams, "target/outputs/database/bitcoinj", 500000);
+		FullPrunedBlockStore blockStore = new H2FullPrunedBlockStore(netParams, "./src/vagrant/splunk/assets/outputs/database/bitcoinj", 500000);
 		BlockChainListener blockChainListener = new LoggingBlockChainListener(blockStore);
 		FullPrunedBlockChain blockChain = new FullPrunedBlockChain(netParams, Arrays.asList(blockChainListener), blockStore);
 		blockChain.setRunScripts(false);
