@@ -28,24 +28,31 @@ public class Main {
 		BlockChainListener blockChainListener = new LoggingBlockChainListener(blockStore);
 		FullPrunedBlockChain blockChain = new FullPrunedBlockChain(netParams, Arrays.asList(blockChainListener), blockStore);
 		blockChain.setRunScripts(false);
-
-		BlockFileLoader loader = new BlockFileLoader(netParams, Arrays.asList(new File("/Users/sni/Library/Application Support/Bitcoin/bootstrap.dat")));
 		
-		for (Block block : loader) {
-			blockChain.add(block);
+		File bootstrapFile = new File("./src/vagrant/splunk/assets/bootstrap.dat");
+		if(bootstrapFile.exists()) {
+			logger.info("Found bootstrap.dat file, start to load blocks from that.");
+			BlockFileLoader loader = new BlockFileLoader(netParams, Arrays.asList(bootstrapFile));
+			for (Block block : loader) {
+				blockChain.add(block);
+			}
+			logger.info("Blocks from bootstrap.dat were loaded.");
+		} else {
+			logger.warn("bootstrap.dat file is not found, the initial syncing will be much slower.");
 		}
 		
-		logger.info("Blocks from bootstrap.dat were loaded.");
 		blockChain.setRunScripts(true);
 		PeerGroup peerGroup = new PeerGroup(netParams, blockChain);
 		peerGroup.setUserAgent("SplunkBitcoin", "0.0.1");
 		peerGroup.addPeerDiscovery(new DnsDiscovery(netParams));
 		peerGroup.startAsync();
-		logger.info("Start to listen to Bitcoin network and download block chains.");
-		peerGroup.downloadBlockChain();
 		// TODO: keep it running without exiting
 		while(true) {
-			Thread.sleep(1000);
+			logger.info("Start to listen to Bitcoin network and download block chains.");
+			peerGroup.downloadBlockChain();
+			peerGroup.awaitTerminated();
+			logger.info("All block chains were downloaded, wait for next block chain to appear.");
+			Thread.sleep(30000);
 		}
 	}
 }

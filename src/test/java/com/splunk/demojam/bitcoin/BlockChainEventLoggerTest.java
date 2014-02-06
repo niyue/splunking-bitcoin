@@ -61,7 +61,7 @@ public class BlockChainEventLoggerTest {
 	public void testLogTransaction() throws Exception {
 		BriefLogFormatter.init();
 
-		FullPrunedBlockStore blockStore = new H2FullPrunedBlockStore(params, "data/bitcoin-blocks.db", 500000);
+		FullPrunedBlockStore blockStore = new H2FullPrunedBlockStore(params, "target/data/bitcoin-blocks", 500000);
 		FullPrunedBlockChain blockChain = new FullPrunedBlockChain(params,  blockStore);
 		// FullPrunedBlockStore blockStore = new MemoryFullPrunedBlockStore(params, 500000);
 		// FullPrunedBlockChain blockChain = new FullPrunedBlockChain(params,  blockStore);

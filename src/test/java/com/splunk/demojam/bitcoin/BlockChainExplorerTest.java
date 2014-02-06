@@ -25,7 +25,7 @@ public class BlockChainExplorerTest {
 	
 	@Test
 	public void testGetChainHead() throws BlockStoreException {
-		FullPrunedBlockStore blockStore = new H2FullPrunedBlockStore(netParams, "data/bitcoin-blocks.db", 500000);
+		FullPrunedBlockStore blockStore = new H2FullPrunedBlockStore(netParams, "target/data/bitcoin-blocks", 500000);
 		FullPrunedBlockChain blockChain = new FullPrunedBlockChain(netParams,  blockStore);
 		logger.info("best-chain-height={}", blockChain.getBestChainHeight());
 		assertThat(blockChain.getBestChainHeight(), greaterThan(0));

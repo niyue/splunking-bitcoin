@@ -16,7 +16,7 @@ public class BlockChainDownloadTest {
 	
 	@Test
 	public void testDownload() throws BlockStoreException {
-		FullPrunedBlockStore blockStore = new H2FullPrunedBlockStore(netParams, "bitcoin-blocks.db", 500000);
+		FullPrunedBlockStore blockStore = new H2FullPrunedBlockStore(netParams, "target/data/bitcoin-blocks", 500000);
 		FullPrunedBlockChain blockChain = new FullPrunedBlockChain(netParams,  blockStore);
 		PeerGroup peerGroup = new PeerGroup(netParams, blockChain);
 		peerGroup.setUserAgent("SplunkBitcoin", "0.0.1");

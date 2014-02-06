@@ -9,12 +9,13 @@ It is consisted of two components:
 
 To set it up (only verified under Mac OS X 10.9):
 
-* git clone the Github repository, let's call the repository folder SPLUNKING_BITCOIN_HOME
-* Download [Splunk](http://www.splunk.com) Linux x64 for RedHat edition and create a symbolic link for the Splunk Linux RPM installer in SPLUNKING_BITCOIN_HOME/src/vagrant/splunk/assets folder
+* git clone the Github repository, let's call the repository folder SPLUNKING_BITCOIN_HOME, and call the SPLUNKING_BITCOIN_HOME/src/vagrant/splunk/assets folder ASSETS folder
+* Download [Splunk](http://www.splunk.com) Linux x64 for RedHat edition and put it under the ASSETS folder
+* Download Bitcoin [bootstrap.dat](http://sourceforge.net/projects/bitcoin/files/Bitcoin/blockchain/) file via BitTorrrent for fast syncing, and put it under ASSETS folder
 * Download and install [Vagrant](http://www.vagrantup.com/)
 * Download and install [Apache Maven](http://maven.apache.org)
 * Enter SPLUNKING_BITCOIN_HOME directory, run "mvn exec:java"
-* Create a symbolic link for the folder SPLUNKING_BITCOIN_HOME/target/outputs/logs in SPLUNKING_BITCOIN_HOME/src/vagrant/splunk/assets folder
-	* ln -s ${SPLUNKING_BITCOIN_HOME}/target/outputs/logs ${SPLUNKING_BITCOIN_HOME}/src/vagrant/splunk/assets
+* Create a symbolic link for the folder SPLUNKING_BITCOIN_HOME/target/outputs/logs in ASSETS folder
+	* ln -s ${SPLUNKING_BITCOIN_HOME}/target/outputs/logs ${ASSETS}
 * Enter SPLUNKING_BITCOIN_HOME/src/vagrant directory, run "vagrant up"
-* That's it, you can nagivate to http://192.168.33.2:8089 to use Splunk Web to explore the data
+* That's it, you can use your browser to nagivate to http://192.168.33.2:8089 to use Splunk Web to explore the data

@@ -20,7 +20,7 @@ public class BlockChainListenerTest {
 	@Test
 	public void testListenBlockChain() throws BlockStoreException, InterruptedException {
 		BlockChainListener blockChainListener = new LoggingBlockChainListener();
-		FullPrunedBlockStore blockStore = new H2FullPrunedBlockStore(netParams, "outputs/database/bitcoinj", 500000);
+		FullPrunedBlockStore blockStore = new H2FullPrunedBlockStore(netParams, "target/data/database/bitcoinj", 500000);
 		FullPrunedBlockChain blockChain = new FullPrunedBlockChain(netParams, Arrays.asList(blockChainListener), blockStore);
 		blockChain.setRunScripts(false);
 		PeerGroup peerGroup = new PeerGroup(netParams, blockChain);
