@@ -1,6 +1,9 @@
 package com.splunk.demojam.bitcoin;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +24,7 @@ public class LoggingBlockChainListener implements BlockChainListener {
 	private static final Logger logger = LoggerFactory.getLogger(LoggingBlockChainListener.class);
 	private final BlockChainEventLogger eventLogger = new BlockChainEventLogger(logger);
 	private final FullPrunedBlockStore blockStore;
-	
-	private int txCount = 0;
+	private Map<Integer, Transaction> transactions = new LinkedHashMap<Integer, Transaction>();
 	
 	public LoggingBlockChainListener() {
 		this(null);
@@ -35,8 +37,11 @@ public class LoggingBlockChainListener implements BlockChainListener {
 	@Override
 	public void notifyNewBestBlock(StoredBlock block)
 			throws VerificationException {
-		eventLogger.log(new StoredBlockEvent(block, txCount));
-		txCount = 0;
+		for(Entry<Integer, Transaction> entry : transactions.entrySet()) {
+			eventLogger.log(new ReceivingTransactionEvent(entry.getValue(), block, NewBlockType.BEST_CHAIN, entry.getKey(), blockStore));
+		}
+		eventLogger.log(new StoredBlockEvent(block, transactions.size()));
+		transactions = new LinkedHashMap<Integer, Transaction>();
 	}
 
 	@Override
@@ -54,8 +59,10 @@ public class LoggingBlockChainListener implements BlockChainListener {
 	public void receiveFromBlock(Transaction tx, StoredBlock block,
 			NewBlockType blockType, int relativityOffset)
 			throws VerificationException {
-		txCount++;
-		eventLogger.log(new ReceivingTransactionEvent(tx, block, blockType, relativityOffset, blockStore));
+		transactions.put(relativityOffset, tx);
+		if(blockType.equals(NewBlockType.SIDE_CHAIN)) {
+			eventLogger.log(new ReceivingTransactionEvent(tx, block, blockType, relativityOffset, blockStore));
+		}
 	}
 
 	@Override

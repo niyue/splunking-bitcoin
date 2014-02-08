@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.bitcoin.core.AbstractBlockChain.NewBlockType;
+import com.google.bitcoin.core.NetworkParameters;
 import com.google.bitcoin.core.ScriptException;
 import com.google.bitcoin.core.Sha256Hash;
 import com.google.bitcoin.core.StoredBlock;
@@ -19,6 +20,8 @@ import com.google.bitcoin.core.TransactionInput;
 import com.google.bitcoin.core.TransactionOutPoint;
 import com.google.bitcoin.core.TransactionOutput;
 import com.google.bitcoin.core.Utils;
+import com.google.bitcoin.params.MainNetParams;
+import com.google.bitcoin.script.Script;
 import com.google.bitcoin.store.BlockStoreException;
 import com.google.bitcoin.store.FullPrunedBlockStore;
 import com.google.common.base.Joiner;
@@ -34,6 +37,7 @@ public class ReceivingTransactionEvent implements BlockChainEvent {
 	private final static Logger logger = LoggerFactory.getLogger(ReceivingTransactionEvent.class);
 	private static int outputIndex = 0;
 	private static Sha256Hash lastBlockHash = new Sha256Hash("0000000000000000000000000000000000000000000000000000000000000000");
+	private static final NetworkParameters netParams = MainNetParams.get();
 	
 	public ReceivingTransactionEvent(Transaction tx, StoredBlock block,
 			NewBlockType blockType, int relativityOffset) {
@@ -47,39 +51,51 @@ public class ReceivingTransactionEvent implements BlockChainEvent {
 		}
 	}
 	
-	private boolean isTransactionInNewBlock() {
-		return !lastBlockHash.equals(block.getHeader().getHash());
-	}
-	
 	public ReceivingTransactionEvent(Transaction tx, StoredBlock block,
 			NewBlockType blockType, int relativityOffset, FullPrunedBlockStore blockStore) {
 		this(tx, block, blockType, relativityOffset);
 		this.blockStore = blockStore;
 	}
 	
+	private boolean isTransactionInNewBlock() {
+		return !lastBlockHash.equals(block.getHeader().getHash());
+	}
+	
+	
 	public Map<String, ? extends Object> create() throws ScriptException {
 		BigInteger inValue = BigInteger.ZERO;
 		List<String> inputs = new ArrayList<String>();
 		for(TransactionInput input : tx.getInputs()) {
 			boolean isCoinBase = input.isCoinBase();
-			String scriptSig = input.getScriptSig().toString();
 			TransactionOutPoint out = input.getOutpoint();
 			BigInteger outValue = BigInteger.ZERO;
+			Sha256Hash blockHash = block.getHeader().getHash();
 			if(blockStore != null && !tx.isCoinBase()) {
 				try {
-					StoredUndoableBlock undoableBlock = blockStore.getUndoBlock(block.getHeader().getHash());
-					List<StoredTransactionOutput> outputs = undoableBlock.getTxOutChanges().txOutsSpent;
-					StoredTransactionOutput txOut = outputs.get(outputIndex);
-					outputIndex++;
-					if(txOut != null) {
-						outValue = txOut.getValue();
+					StoredUndoableBlock undoableBlock = blockStore.getUndoBlock(blockHash);
+					if(undoableBlock != null && undoableBlock.getTxOutChanges() != null) {
+						if(undoableBlock.getTxOutChanges() != null) {
+							List<StoredTransactionOutput> outputs = undoableBlock.getTxOutChanges().txOutsSpent;
+							StoredTransactionOutput txOut = outputs.get(outputIndex);
+							outputIndex++;
+							if(txOut != null) {
+								outValue = txOut.getValue();
+							}
+						} else {
+							logger.warn("Transaction input was not handle because txOutChanges were not found. block-hash={}", blockHash);
+						}
+					} else {
+						logger.error("Fail to retrieve the block for block hash={}", blockHash);
 					}
 				} catch (BlockStoreException e) {
 					logger.error("Fail to get transaction output, message={}, cause={}", e.getMessage(), e.getCause());
 				}
 				inValue = inValue.add(outValue);
 			}
-			String in = String.format("script-sig=%s, is-coinbase=%s, out-hash=%s, out-index=%s, out-value=%s", scriptSig, isCoinBase, out.getHash(), out.getIndex(), outValue);
+			@SuppressWarnings("deprecation")
+			// NOTE: the getFromAddress API may be removed from bitcoinj later
+			String fromAddress = input.isCoinBase() ? "coinbase" : input.getFromAddress().toString();
+			String in = String.format("is-coinbase=%s, from-address=%s, out-hash=%s, out-index=%s, out-value=%s", isCoinBase, fromAddress, out.getHash(), out.getIndex(), outValue);
 			inputs.add(in);
 		}
 		
@@ -87,11 +103,14 @@ public class ReceivingTransactionEvent implements BlockChainEvent {
 		List<String> outputs = new ArrayList<String>();
 		for(TransactionOutput output : tx.getOutputs()) {
 			outValue = outValue.add(output.getValue());
-			String spentBy = output.getSpentBy() == null ? "" : output.getSpentBy().getParentTransaction().getHashAsString();
-			String out = String.format("value=%s, is-spent=%s, spent-by=%s", 
-					Utils.bitcoinValueToFriendlyString(output.getValue()), 
-					!output.isAvailableForSpending(), 
-					spentBy);
+			Script scriptPubKey = output.getScriptPubKey();
+			String toAddress = "NA";
+			if(scriptPubKey.isSentToAddress() || scriptPubKey.isSentToP2SH()) {
+				toAddress = scriptPubKey.getToAddress(netParams).toString();
+			}
+			String out = String.format("to-address=%s, value=%s",
+					toAddress,
+					Utils.bitcoinValueToFriendlyString(output.getValue()));
 			outputs.add(out);
 		}
 		BigInteger transactionFee = inValue.equals(BigInteger.ZERO) ? BigInteger.ZERO : inValue.subtract(outValue);
