@@ -7,6 +7,7 @@ import com.google.bitcoin.core.StoredBlock;
 import com.google.bitcoin.core.VerificationException;
 import com.google.common.collect.ImmutableMap;
 import com.splunk.demojam.bitcoin.DateFormatter;
+import com.splunk.demojam.bitcoin.Difficulty;
 
 public class StoredBlockEvent implements BlockChainEvent {
 	private final StoredBlock block;
@@ -28,7 +29,8 @@ public class StoredBlockEvent implements BlockChainEvent {
 				.put("previous", header.getPrevBlockHash())
 				.put("inflation", header.getBlockInflation(block.getHeight()))
 				.put("merkle-root", header.getMerkleRoot())
-				.put("difficulty", header.getDifficultyTarget())
+				.put("difficulty-target", header.getDifficultyTarget())
+				.put("difficulty", Difficulty.convert(header.getDifficultyTarget()))
 				.put("size", header.getMessageSize())
 				.put("nounce", header.getNonce())
 				.put("version", header.getVersion())
