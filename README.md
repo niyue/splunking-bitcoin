@@ -28,4 +28,4 @@ To set it up (only verified under Mac OS X 10.9):
 * Use vagrant to set up the entire environment
 	* Enter SPLUNKING_BITCOIN_HOME/src/vagrant directory, run "vagrant up"
 * That's it
-	* you can use your browser to nagivate to http://192.168.33.2:8000 (admin:999admin) to use Splunk Web to explore the data
+	* you can use your browser to nagivate to http://192.168.33.9:8000 (admin:999admin) to use Splunk Web to explore the data
