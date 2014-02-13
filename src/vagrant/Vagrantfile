@@ -1,0 +1,32 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # All Vagrant configuration is done here. The most common configuration
+  # options are documented and commented below. For a complete reference,
+  # please see the online documentation at vagrantup.com.
+
+  # Every Vagrant virtual environment requires a box to build off of.
+  config.vm.box = "centos-65-x86-64-v20140110"
+  config.vm.box_url = "http://developer.nrel.gov/downloads/vagrant-boxes/CentOS-6.5-x86_64-v20140110.box"
+
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 2048
+    v.customize ["modifyvm", :id, "--cpus", "4"]
+    v.customize ["modifyvm", :id, "--ioapic", "on"]
+  end
+
+  config.vm.define "splunk" do |splunk|
+    splunk.vm.hostname = "smoke.splunk.dev"
+    splunk.vm.network "private_network", ip: "192.168.33.9"
+    splunk.vm.provision :puppet do |puppet|
+      puppet.options = "--verbose --debug"
+      puppet.manifests_path = "splunk/manifests"
+      puppet.manifest_file  = "default.pp"
+      puppet.module_path = ["splunk/modules", "modules"]
+    end
+  end
+end
