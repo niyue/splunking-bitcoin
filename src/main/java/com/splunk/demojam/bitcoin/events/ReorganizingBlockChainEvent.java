@@ -17,16 +17,16 @@ public class ReorganizingBlockChainEvent implements BlockChainEvent {
 		StoredBlock newBlockHead = oldBlocks.get(0);
 		map = ImmutableMap.<String, Object>builder()
 				.put("time", DateFormatter.format(new Date()))
-				.put("event", "reorganize-block-chain")
-				.put("split-point-height", splitPoint.getHeight())
-				.put("split-point-hash", splitPoint.getHeader().getHashAsString())
-				.put("split-point-time", DateFormatter.format(splitPoint.getHeader().getTime()))
-				.put("old-block-height", oldBlockHead.getHeight())
-				.put("old-block-hash", oldBlockHead.getHeader().getHashAsString())
-				.put("old-block-time", DateFormatter.format(oldBlockHead.getHeader().getTime()))
-				.put("new-block-height", newBlockHead.getHeight())
-				.put("new-block-hash", newBlockHead.getHeader().getHashAsString())
-				.put("new-block-time", DateFormatter.format(newBlockHead.getHeader().getTime()))
+				.put("event", "reorganize_block_chain")
+				.put("split_point_height", splitPoint.getHeight())
+				.put("split_point_hash", splitPoint.getHeader().getHashAsString())
+				.put("split_point_time", DateFormatter.format(splitPoint.getHeader().getTime()))
+				.put("old_block_height", oldBlockHead.getHeight())
+				.put("old_block_hash", oldBlockHead.getHeader().getHashAsString())
+				.put("old_block_time", DateFormatter.format(oldBlockHead.getHeader().getTime()))
+				.put("new_block_height", newBlockHead.getHeight())
+				.put("new_block_hash", newBlockHead.getHeader().getHashAsString())
+				.put("new_block_time", DateFormatter.format(newBlockHead.getHeader().getTime()))
 				.build();
 	}
 	

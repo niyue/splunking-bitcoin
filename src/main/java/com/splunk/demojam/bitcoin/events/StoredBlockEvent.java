@@ -22,20 +22,20 @@ public class StoredBlockEvent implements BlockChainEvent {
 		Block header = block.getHeader();
 		Map<String, ? extends Object> map = ImmutableMap.<String, Object>builder()
 				.put("time", DateFormatter.format(header.getTime()))
-				.put("event", "new-best-block")
+				.put("event", "new_best_block")
 				.put("hash", header.getHashAsString())
 				.put("height", block.getHeight())
-				.put("chain-work", block.getChainWork())
+				.put("chain_work", block.getChainWork())
 				.put("previous", header.getPrevBlockHash())
 				.put("inflation", header.getBlockInflation(block.getHeight()))
-				.put("merkle-root", header.getMerkleRoot())
-				.put("difficulty-target", header.getDifficultyTarget())
+				.put("merkle_root", header.getMerkleRoot())
+				.put("difficulty_target", header.getDifficultyTarget())
 				.put("difficulty", Difficulty.convert(header.getDifficultyTarget()))
 				.put("size", header.getMessageSize())
 				.put("nounce", header.getNonce())
 				.put("version", header.getVersion())
 				.put("work", header.getWork())
-				.put("tx-count", txCount)
+				.put("tx_count", txCount)
 				.build();
 		return map;
 	}

@@ -82,7 +82,7 @@ public class ReceivingTransactionEvent implements BlockChainEvent {
 								outValue = txOut.getValue();
 							}
 						} else {
-							logger.warn("Transaction input was not handle because txOutChanges were not found. block-hash={}", blockHash);
+							logger.warn("Transaction input was not handle because txOutChanges were not found. block_hash={}", blockHash);
 						}
 					} else {
 						logger.error("Fail to retrieve the block for block hash={}", blockHash);
@@ -92,10 +92,18 @@ public class ReceivingTransactionEvent implements BlockChainEvent {
 				}
 				inValue = inValue.add(outValue);
 			}
-			@SuppressWarnings("deprecation")
-			// NOTE: the getFromAddress API may be removed from bitcoinj later
-			String fromAddress = input.isCoinBase() ? "coinbase" : input.getFromAddress().toString();
-			String in = String.format("is-coinbase=%s, from-address=%s, out-hash=%s, out-index=%s, out-value=%s", isCoinBase, fromAddress, out.getHash(), out.getIndex(), outValue);
+			String fromAddress = "coinbase";
+			if(!input.isCoinBase()) {
+				try {
+					// NOTE: the getFromAddress API may be removed from bitcoinj later
+					@SuppressWarnings("deprecation")
+					String from = input.getFromAddress().toString();
+					fromAddress = from;
+				} catch (ScriptException e) {
+					fromAddress = "unknown";
+				}
+			}
+			String in = String.format("is_coinbase=%s, from_address=%s, out_hash=%s, out_index=%s, out_value=%s", isCoinBase, fromAddress, out.getHash(), out.getIndex(), outValue);
 			inputs.add(in);
 		}
 		
@@ -108,7 +116,7 @@ public class ReceivingTransactionEvent implements BlockChainEvent {
 			if(scriptPubKey.isSentToAddress() || scriptPubKey.isSentToP2SH()) {
 				toAddress = scriptPubKey.getToAddress(netParams).toString();
 			}
-			String out = String.format("to-address=%s, value=%s",
+			String out = String.format("to_address=%s, value=%s",
 					toAddress,
 					Utils.bitcoinValueToFriendlyString(output.getValue()));
 			outputs.add(out);
@@ -116,25 +124,25 @@ public class ReceivingTransactionEvent implements BlockChainEvent {
 		BigInteger transactionFee = inValue.equals(BigInteger.ZERO) ? BigInteger.ZERO : inValue.subtract(outValue);
 		Map<String, ? extends Object> map = ImmutableMap.<String, Object>builder()
 				.put("time", DateFormatter.format((block.getHeader().getTime())))
-				.put("event", "new-transaction")
+				.put("event", "new_transaction")
 				.put("hash", tx.getHashAsString())
 				.put("size", tx.getMessageSize())
-				.put("sig-op-count", tx.getSigOpCount())
+				.put("sig_op_count", tx.getSigOpCount())
 				.put("purpose", tx.getPurpose())
 				.put("version", tx.getVersion())
-				.put("is-coinbase", tx.isCoinBase())
-				.put("is-every-output-spent", tx.isEveryOutputSpent())
-				.put("is-mature", tx.isMature())
-				.put("is-pending", tx.isPending())
-				.put("is-time-locked", tx.isTimeLocked())
-				.put("block-height", block.getHeight())
-				.put("block-hash", block.getHeader().getHashAsString())
-				.put("block-type", blockType)
-				.put("relativity-offset", relativityOffset)
-				.put("input-value", Utils.bitcoinValueToFriendlyString(inValue))
-				.put("input-size", tx.getInputs().size())
-				.put("output-value", Utils.bitcoinValueToFriendlyString(outValue))
-				.put("output-size", tx.getOutputs().size())
+				.put("is_coinbase", tx.isCoinBase())
+				.put("is_every_output_spent", tx.isEveryOutputSpent())
+				.put("is_mature", tx.isMature())
+				.put("is_pending", tx.isPending())
+				.put("is_time_locked", tx.isTimeLocked())
+				.put("block_height", block.getHeight())
+				.put("block_hash", block.getHeader().getHashAsString())
+				.put("block_type", blockType)
+				.put("relativity_offset", relativityOffset)
+				.put("input_value", Utils.bitcoinValueToFriendlyString(inValue))
+				.put("input_size", tx.getInputs().size())
+				.put("output_value", Utils.bitcoinValueToFriendlyString(outValue))
+				.put("output_size", tx.getOutputs().size())
 				.put("fee", Utils.bitcoinValueToFriendlyString(transactionFee))
 				.put("inputs", String.format("[%s]", Joiner.on(", ").join(inputs)))
 				.put("outputs", String.format("[%s]", Joiner.on(", ").join(outputs)))

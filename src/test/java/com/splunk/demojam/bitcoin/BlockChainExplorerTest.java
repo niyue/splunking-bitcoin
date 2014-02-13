@@ -27,12 +27,12 @@ public class BlockChainExplorerTest {
 	public void testGetChainHead() throws BlockStoreException {
 		FullPrunedBlockStore blockStore = new H2FullPrunedBlockStore(netParams, "target/data/bitcoin-blocks", 500000);
 		FullPrunedBlockChain blockChain = new FullPrunedBlockChain(netParams,  blockStore);
-		logger.info("best-chain-height={}", blockChain.getBestChainHeight());
+		logger.info("best_chain_height={}", blockChain.getBestChainHeight());
 		assertThat(blockChain.getBestChainHeight(), greaterThan(0));
 		StoredBlock headBlock = blockChain.getChainHead();
 		assertThat(headBlock, notNullValue());
 		// Work is a measure of how many tries are needed to solve a block
-		logger.info("chain-work={}", headBlock.getChainWork());
+		logger.info("chain_work={}", headBlock.getChainWork());
 		StoredBlock secondBlock = headBlock.getPrev(blockStore);
 		assertThat(secondBlock, notNullValue());
 		

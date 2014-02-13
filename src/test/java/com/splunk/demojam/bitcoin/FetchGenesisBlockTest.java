@@ -85,7 +85,7 @@ public class FetchGenesisBlockTest {
         logger.info("Waiting for node to send us the requested block: " + blockHash);
         Block block = future.get();
         logger.info("block={}", block);
-        logger.info("block-difficulty={}", Difficulty.convert(block.getDifficultyTarget()));
+        logger.info("block_difficulty={}", Difficulty.convert(block.getDifficultyTarget()));
         List<Transaction> transactions = block.getTransactions();
         assertThat(transactions.size(), is(2));
         Transaction coinbaseTx = transactions.get(0);

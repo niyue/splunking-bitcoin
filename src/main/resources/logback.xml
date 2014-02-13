@@ -12,11 +12,11 @@
 	</appender>
 	
 	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_DIR}/blocks.log</file>
+        <file>${LOG_DIR}/latest/blocks.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      		<fileNamePattern>${LOG_DIR}/blocks-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+      		<fileNamePattern>${LOG_DIR}/archive/blocks-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
       		<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-        		<maxFileSize>512MB</maxFileSize>
+        		<maxFileSize>1024MB</maxFileSize>
       		</timeBasedFileNamingAndTriggeringPolicy>
     	</rollingPolicy>
         <encoder>
