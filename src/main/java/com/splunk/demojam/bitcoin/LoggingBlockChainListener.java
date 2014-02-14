@@ -38,16 +38,32 @@ public class LoggingBlockChainListener implements BlockChainListener {
 	public void notifyNewBestBlock(StoredBlock block)
 			throws VerificationException {
 		for(Entry<Integer, Transaction> entry : transactions.entrySet()) {
-			eventLogger.log(new ReceivingTransactionEvent(entry.getValue(), block, NewBlockType.BEST_CHAIN, entry.getKey(), blockStore));
+			try {
+				eventLogger.log(new ReceivingTransactionEvent(entry.getValue(), block, NewBlockType.BEST_CHAIN, entry.getKey(), blockStore));
+			} catch (Exception e) {
+				logger.error("Fail to handle transaction in new block, error=%s, block_height=%s, transaction=%s, error_message=%s", 
+						"transaction_error", block.getHeight(), entry.getValue().getHashAsString(), e.getMessage());
+				e.printStackTrace();
+			}
 		}
-		eventLogger.log(new StoredBlockEvent(block, transactions.size()));
+		try {
+			eventLogger.log(new StoredBlockEvent(block, transactions.size()));
+		} catch (Exception e) {
+			logger.error("Fail to handle new best block, error=%s, block_hash=%s, block_height=%s", 
+					"best_block_error", block.getHeader().getHashAsString(), block.getHeight());
+		}
 		transactions = new LinkedHashMap<Integer, Transaction>();
 	}
 
 	@Override
 	public void reorganize(StoredBlock splitPoint, List<StoredBlock> oldBlocks,
 			List<StoredBlock> newBlocks) throws VerificationException {
-		eventLogger.log(new ReorganizingBlockChainEvent(splitPoint, oldBlocks, newBlocks));
+		try {
+			eventLogger.log(new ReorganizingBlockChainEvent(splitPoint, oldBlocks, newBlocks));
+		} catch (Exception e) {
+			logger.error("Fail to handle block chain reorganize, error=%s, split_point=%s, old_block_height=%s, new_block_height=%s, error_message=%s", 
+					"reorganize_error", splitPoint, oldBlocks.size(), newBlocks.size(), e.getMessage());
+		}
 	}
 
 	@Override
@@ -61,7 +77,12 @@ public class LoggingBlockChainListener implements BlockChainListener {
 			throws VerificationException {
 		transactions.put(relativityOffset, tx);
 		if(blockType.equals(NewBlockType.SIDE_CHAIN)) {
-			eventLogger.log(new ReceivingTransactionEvent(tx, block, blockType, relativityOffset, blockStore));
+			try {
+				eventLogger.log(new ReceivingTransactionEvent(tx, block, blockType, relativityOffset, blockStore));
+			}  catch (Exception e) {
+				logger.error("Fail to handle transaction in a side chain block, error=%s, block_height=%s, transaction=%s, error_message=%s", 
+						"side_chain_transaction_error", block.getHeight(), tx.getHashAsString(), e.getMessage());
+			}
 		}
 	}
 
