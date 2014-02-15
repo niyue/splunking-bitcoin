@@ -29,16 +29,21 @@ public class Main {
 		FullPrunedBlockChain blockChain = new FullPrunedBlockChain(netParams, Arrays.asList(blockChainListener), blockStore);
 		blockChain.setRunScripts(false);
 		
-		File bootstrapFile = new File("./src/vagrant/splunk/assets/bootstrap.dat");
-		if(bootstrapFile.exists()) {
-			logger.info("Found bootstrap.dat file, start to load blocks from that.");
-			BlockFileLoader loader = new BlockFileLoader(netParams, Arrays.asList(bootstrapFile));
-			for (Block block : loader) {
-				blockChain.add(block);
+		if(Arrays.asList(args).contains("bootstrap")) {
+			logger.info("Bootstrap from a bootstrap file");
+			File bootstrapFile = new File("./src/vagrant/splunk/assets/bootstrap.dat");
+			if(bootstrapFile.exists()) {
+				logger.info("Found bootstrap.dat file, start to load blocks from that.");
+				BlockFileLoader loader = new BlockFileLoader(netParams, Arrays.asList(bootstrapFile));
+				for (Block block : loader) {
+					blockChain.add(block);
+				}
+				logger.info("Blocks from bootstrap.dat were loaded.");
+			} else {
+				logger.warn("bootstrap.dat file is not found, the initial syncing will be much slower.");
 			}
-			logger.info("Blocks from bootstrap.dat were loaded.");
 		} else {
-			logger.warn("bootstrap.dat file is not found, the initial syncing will be much slower.");
+			logger.info("Start synching without bootstrapping");
 		}
 		
 		blockChain.setRunScripts(true);
