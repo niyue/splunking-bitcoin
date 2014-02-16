@@ -1,0 +1,6 @@
+<nav search_view="search" color="#65A637">
+  <view name="search" />
+  <view name="reports" />
+  <view name="dashboards" />
+  <a href="http://smoke.splunk.dev:8000/en-US/static/app/bitcoin/slides/index.html">Slides</a>
+</nav>

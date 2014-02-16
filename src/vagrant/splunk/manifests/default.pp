@@ -12,36 +12,25 @@ firewall { '100 allow splunk access':
   action => accept,
 }
 
-file { "/vagrant/splunk/assets/outputs/logs/import":
-  source  => "/vagrant/splunk/assets/outputs/logs/archive",
-  recurse => true,
-  require => Class['splunk'],
-}
-
-file { 'app-local-dir':
-  ensure  => directory,
-  path    => '/opt/splunk/etc/apps/launcher/local',
-  require => Class['splunk'],
-}
-
-file { 'inputs.conf':
-  ensure  => present,
-  path    => '/opt/splunk/etc/apps/launcher/local/inputs.conf',
-  content => template('/vagrant/splunk/templates/site/inputs.conf.erb'),
-  mode    => 644,
-  require => File['app-local-dir'],
-}
-
-exec { 'reload-inputs-conf':
-  command => "curl https://localhost:8089/services/data/inputs/monitor/_reload --insecure --request POST -u admin:$admin_password",
-  require => File['inputs.conf'],
-  path    => ['/usr/bin'],
-}
+# file { "/vagrant/splunk/assets/outputs/logs/import":
+#  source  => "/vagrant/splunk/assets/outputs/logs/archive",
+#  ensure  => directory,
+#  recurse => true,
+#  before  => Class['splunk'],
+# }
 
 exec { 'add-license':
   command => 'date',
   path    => '/opt/splunk/bin',
   onlyif  => 'splunk -auth admin:$admin_password add licenses /vagrant/splunk/assets/splunk.license',
+  require => Class['splunk'],
+}
+
+file { 'bitcoinapp':
+  ensure  => present,
+  path    => '/opt/splunk/etc/apps/bitcoin',
+  source  => '/vagrant/splunk/apps/bitcoin',
+  recurse => true,
   require => Class['splunk'],
 }
 
