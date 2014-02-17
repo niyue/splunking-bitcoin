@@ -21,10 +21,9 @@ firewall { '100 allow splunk access':
 # }
 
 file { 'bitcoinapp':
-  ensure  => present,
+  ensure  => link,
   path    => '/opt/splunk/etc/apps/bitcoin',
-  source  => '/vagrant/splunk/apps/bitcoin',
-  recurse => true,
+  target  => '/vagrant/splunk/apps/bitcoin',
   require => Class['splunk'],
 }
 

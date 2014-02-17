@@ -32,6 +32,7 @@
 		<!--[if lt IE 9]>
 		<script src="lib/js/html5shiv.js"></script>
 		<![endif]-->
+		<link rel="stylesheet" href="css/bitcoin.css" id="theme">
 	</head>
 
 	<body>
@@ -47,23 +48,45 @@
 						<small>Samuel Ni</small>
 					</p>
 				</section>
-
 				<section>
-					<h2>Heads Up</h2>
+					<h2>Bitcoin</h2>
+					<h3>A peer-to-peer payment system and digital currency</h3>
+				</section>
+				<section data-background="#FFFFFF">
+					<h2 class="black">Block chain</h2>
+					<img src="images/block_chain.png" />
+				</section>
+				<section data-background="#FFFFFF">
+					<h2 class="black">Block chain downloader/event listener</h2>
+					<img src="images/bitcoin_program.png" height="500" />
+				</section>
+				<section>
+					<h2>Block chain growing</h2>
 					<p>
-						reveal.js is a framework for easily creating beautiful presentations using HTML. You'll need a browser with
-						support for CSS 3D transforms to see it in its full glory.
+						The growing speed of the block chain in last week
 					</p>
 
-					<aside class="notes">
-						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
-					</aside>
                     <p>
-                        <iframe src="http://smoke.splunk.dev:8000/en-US/app/bitcoin/transaction_fee" width="100%" height="300" seamless="true"></iframe>
+                        <iframe src="http://smoke.splunk.dev:8000/en-US/app/bitcoin/block_chain_height_in_last_week" width="100%" height="300" seamless="true"></iframe>
                     </p>
                     <pre>
                         <code data-trim style="font-size: 1.2em;">
-                            event=new-best-block | dedup hash | timechart values(tx_count) span=2m 
+                            earliest=-7d event=new_best_block | timechart max(height) span=10m
+                        </code>
+                    </pre>
+                </section>
+                <section>   
+                	<h2>Block chain (cont.)</h2> 
+					<p>
+						The growing speed of the block chain
+					</p>
+
+                    <p>
+                        <iframe src="http://smoke.splunk.dev:8000/en-US/app/bitcoin/block_chain_height" width="100%" height="300" seamless="true"></iframe>
+                    </p>
+                    <pre>
+                        <code data-trim style="font-size: 1.2em;">
+                            event=new_best_block | timechart max(height) span=2d
                         </code>
                     </pre>
 				</section>
