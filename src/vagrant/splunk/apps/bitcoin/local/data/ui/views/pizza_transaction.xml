@@ -1,0 +1,18 @@
+<view template="dashboard.html" isDashboard="False">
+  <label>Pizza Transaction</label>
+  <module name="Message" layoutPanel="messaging">
+    <param name="filter">*</param>
+    <param name="clearOnJobDispatch">False</param>
+    <param name="maxSize">1</param>
+  </module>
+          <module name="HiddenSavedSearch" layoutPanel="panel_row1_col1" autoRun="true">
+                <param name="savedSearch">pizza transaction</param>
+                <module name="SimpleResultsTable">
+                </module>
+                
+                <module name="EnablePreview">
+                        <param name="display">False</param>
+                        <param name="enable">True</param>
+                </module>
+          </module>
+ </view>

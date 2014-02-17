@@ -90,7 +90,23 @@
                         </code>
                     </pre>
 				</section>
-
+				<section>
+					<h2>The legendary pizza</h2>
+					<img src="images/pizza.png" height="300" />
+					<img src="images/pizza_post.png" height="250"/>
+				</section>
+				<section>
+					<h2>Tracing the pizza</h2>
+					<p>
+                        <iframe src="http://smoke.splunk.dev:8000/en-US/app/bitcoin/pizza_transaction" width="100%" height="300" seamless="true"></iframe>
+                    </p>
+                    <pre>
+						<code data-trim style="font-size: 1.2em;">
+	                        event=new_transaction output_value=10000.00 starttime=05/21/2010:00:00:00 endtime=05/23/2010:00:00:00 | 
+table _time block_height hash input_value output_value from_address
+	                    </code>
+	                </pre>
+				</section>
 				<!-- Example of nested vertical slides -->
 				<section>
 					<section>
