@@ -1,9 +1,10 @@
 $admin_password = '999admin'
 
 class { "splunk":
-  install        => "server",
-  install_source => "/vagrant/splunk/assets/splunk-6.0.1-189883-linux-2.6-x86_64.rpm",
-  admin_password => $admin_password,
+  install               => "server",
+  install_source        => "/vagrant/splunk/assets/splunk-6.0.1-189883-linux-2.6-x86_64.rpm",
+  license_file_source   => "/vagrant/splunk/assets/splunk.license",
+  admin_password        => $admin_password,
 }
 
 firewall { '100 allow splunk access':
@@ -19,13 +20,6 @@ firewall { '100 allow splunk access':
 #  before  => Class['splunk'],
 # }
 
-exec { 'add-license':
-  command => 'date',
-  path    => '/opt/splunk/bin',
-  onlyif  => 'splunk -auth admin:$admin_password add licenses /vagrant/splunk/assets/splunk.license',
-  require => Class['splunk'],
-}
-
 file { 'bitcoinapp':
   ensure  => present,
   path    => '/opt/splunk/etc/apps/bitcoin',
@@ -36,5 +30,5 @@ file { 'bitcoinapp':
 
 exec { 'restart-splunk':
   command => '/opt/splunk/bin/splunk restart',
-  require => Exec['add-license'],
+  require => File['bitcoinapp'],
 }
