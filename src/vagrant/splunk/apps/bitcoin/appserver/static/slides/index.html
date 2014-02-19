@@ -91,6 +91,30 @@
                     </pre>
 				</section>
 				<section>   
+                	<h2>Difficulty and hash rate</h2> 
+                    <p>
+                        <iframe src="http://smoke.splunk.dev:8000/en-US/app/bitcoin/difficulty" width="100%" height="300" seamless="true"></iframe>
+                    </p>
+                    <pre>
+                        <code data-trim style="font-size: 1.2em;">
+                            event=new_best_block | timechart max(difficulty) span=2d
+                        </code>
+                    </pre>
+                    <p>
+                        <iframe src="http://smoke.splunk.dev:8000/en-US/app/bitcoin/hash_rate" width="100%" height="300" seamless="true"></iframe>
+                    </p>
+                    <pre>
+                        <code data-trim style="font-size: 1.2em;">
+                            event=new_best_block | 
+                            delta _time as interval | 
+                            delta chain_work as hashes | 
+                            eval hash_rate = abs(hashes / interval)  | 
+                            table _time height interval hashes hash_rate | 
+                            timechart span=2d avg(hash_rate)
+                        </code>
+                    </pre>
+				</section>
+				<section>   
                 	<h2>Bitcoin economy</h2> 
 					<p>
 						Number of transactions per 48 hours
@@ -100,7 +124,7 @@
                     </p>
                     <pre>
                         <code data-trim style="font-size: 1.2em;">
-                            event=new-best-block | dedup hash | timechart sum(tx_count) span=2d
+                            event=new_best_block timechart sum(tx_count) span=2d
                         </code>
                     </pre>
 				</section>
