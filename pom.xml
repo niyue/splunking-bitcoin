@@ -29,6 +29,8 @@
 				<configuration>
 					<mainClass>com.splunk.demojam.bitcoin.Main</mainClass>
 					<arguments>
+						<argument>bootstrap</argument>
+						<argument>download</argument>
 					</arguments>
 				</configuration>
 			</plugin>
