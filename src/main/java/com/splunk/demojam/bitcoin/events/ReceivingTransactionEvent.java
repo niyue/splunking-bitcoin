@@ -22,6 +22,8 @@ import com.google.bitcoin.core.TransactionOutput;
 import com.google.bitcoin.core.Utils;
 import com.google.bitcoin.params.MainNetParams;
 import com.google.bitcoin.script.Script;
+import com.google.bitcoin.script.ScriptChunk;
+import com.google.bitcoin.script.ScriptOpCodes;
 import com.google.bitcoin.store.BlockStoreException;
 import com.google.bitcoin.store.FullPrunedBlockStore;
 import com.google.common.base.Joiner;
@@ -101,6 +103,14 @@ public class ReceivingTransactionEvent implements BlockChainEvent {
 					fromAddress = from;
 				} catch (ScriptException e) {
 					fromAddress = "unknown";
+				}
+			}
+			Script script = input.getScriptSig();
+			for(ScriptChunk chunk : script.getChunks()) {
+				if (chunk.isOpCode()) {
+					String opCodeName = ScriptOpCodes.getOpCodeName(chunk.data[0]);
+					logger.info("time={}, event=tx_op, op_code={}, tx={}, block_height={}, script_sig={}", 
+							DateFormatter.format((block.getHeader().getTime())), opCodeName, tx.getHashAsString(), block.getHeight(), input.getScriptSig());
 				}
 			}
 			String in = String.format("is_coinbase=%s, from_address=%s, out_hash=%s, out_index=%s, out_value=%s", isCoinBase, fromAddress, out.getHash(), out.getIndex(), outValue);

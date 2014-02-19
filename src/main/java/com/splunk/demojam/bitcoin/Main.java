@@ -46,18 +46,20 @@ public class Main {
 			logger.info("Start synching without bootstrapping");
 		}
 		
-		blockChain.setRunScripts(true);
-		PeerGroup peerGroup = new PeerGroup(netParams, blockChain);
-		peerGroup.setUserAgent("SplunkBitcoin", "0.0.1");
-		peerGroup.addPeerDiscovery(new DnsDiscovery(netParams));
-		peerGroup.startAsync();
-		// TODO: keep it running without exiting
-		while(true) {
-			logger.info("Start to listen to Bitcoin network and download block chains.");
-			peerGroup.downloadBlockChain();
-			peerGroup.awaitTerminated();
-			logger.info("All block chains were downloaded, wait for next block chain to appear.");
-			Thread.sleep(30000);
+		if(Arrays.asList(args).contains("download")) {
+			blockChain.setRunScripts(true);
+			PeerGroup peerGroup = new PeerGroup(netParams, blockChain);
+			peerGroup.setUserAgent("SplunkBitcoin", "0.0.1");
+			peerGroup.addPeerDiscovery(new DnsDiscovery(netParams));
+			peerGroup.startAsync();
+			// TODO: keep it running without exiting
+			while(true) {
+				logger.info("Start to listen to Bitcoin network and download block chains.");
+				peerGroup.downloadBlockChain();
+				peerGroup.awaitTerminated();
+				logger.info("All block chains were downloaded, wait for next block chain to appear.");
+				Thread.sleep(30000);
+			}
 		}
 	}
 }

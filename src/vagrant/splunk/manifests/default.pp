@@ -2,7 +2,7 @@ $admin_password = '999admin'
 
 class { "splunk":
   install               => "server",
-  install_source        => "/vagrant/splunk/assets/splunk-6.0.1-189883-linux-2.6-x86_64.rpm",
+  install_source        => "/vagrant/splunk/assets/splunk-6-linux-2.6-x86_64.rpm",
   license_file_source   => "/vagrant/splunk/assets/splunk.license",
   admin_password        => $admin_password,
 }

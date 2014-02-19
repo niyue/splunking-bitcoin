@@ -41,7 +41,7 @@ public class LoggingBlockChainListener implements BlockChainListener {
 			try {
 				eventLogger.log(new ReceivingTransactionEvent(entry.getValue(), block, NewBlockType.BEST_CHAIN, entry.getKey(), blockStore));
 			} catch (Exception e) {
-				logger.error("Fail to handle transaction in new block, error=%s, block_height=%s, transaction=%s, error_message=%s", 
+				logger.error("Fail to handle transaction in new block, error={}, block_height={}, transaction={}, error_message={}", 
 						"transaction_error", block.getHeight(), entry.getValue().getHashAsString(), e.getMessage());
 				e.printStackTrace();
 			}
@@ -49,7 +49,7 @@ public class LoggingBlockChainListener implements BlockChainListener {
 		try {
 			eventLogger.log(new StoredBlockEvent(block, transactions.size()));
 		} catch (Exception e) {
-			logger.error("Fail to handle new best block, error=%s, block_hash=%s, block_height=%s", 
+			logger.error("Fail to handle new best block, error={}, block_hash={}, block_height={}", 
 					"best_block_error", block.getHeader().getHashAsString(), block.getHeight());
 		}
 		transactions = new LinkedHashMap<Integer, Transaction>();
@@ -61,7 +61,7 @@ public class LoggingBlockChainListener implements BlockChainListener {
 		try {
 			eventLogger.log(new ReorganizingBlockChainEvent(splitPoint, oldBlocks, newBlocks));
 		} catch (Exception e) {
-			logger.error("Fail to handle block chain reorganize, error=%s, split_point=%s, old_block_height=%s, new_block_height=%s, error_message=%s", 
+			logger.error("Fail to handle block chain reorganize, error={}, split_point={}, old_block_height={}, new_block_height={}, error_message={}", 
 					"reorganize_error", splitPoint, oldBlocks.size(), newBlocks.size(), e.getMessage());
 		}
 	}
@@ -80,7 +80,7 @@ public class LoggingBlockChainListener implements BlockChainListener {
 			try {
 				eventLogger.log(new ReceivingTransactionEvent(tx, block, blockType, relativityOffset, blockStore));
 			}  catch (Exception e) {
-				logger.error("Fail to handle transaction in a side chain block, error=%s, block_height=%s, transaction=%s, error_message=%s", 
+				logger.error("Fail to handle transaction in a side chain block, error={}, block_height={}, transaction={}, error_message={}", 
 						"side_chain_transaction_error", block.getHeight(), tx.getHashAsString(), e.getMessage());
 			}
 		}

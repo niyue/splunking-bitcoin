@@ -28,6 +28,8 @@
 				</executions>
 				<configuration>
 					<mainClass>com.splunk.demojam.bitcoin.Main</mainClass>
+					<arguments>
+					</arguments>
 				</configuration>
 			</plugin>
 		</plugins>
