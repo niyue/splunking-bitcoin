@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.DatatypeConverter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,13 +107,13 @@ public class ReceivingTransactionEvent implements BlockChainEvent {
 					fromAddress = "unknown";
 				}
 			}
-			Script script = input.getScriptSig();
-			for(ScriptChunk chunk : script.getChunks()) {
-				if (chunk.isOpCode()) {
-					String opCodeName = ScriptOpCodes.getOpCodeName(chunk.data[0]);
-					logger.info("time={}, event=tx_op, op_code={}, tx={}, block_height={}, script_sig={}", 
-							DateFormatter.format((block.getHeader().getTime())), opCodeName, tx.getHashAsString(), block.getHeight(), input.getScriptSig());
-				}
+			byte[] scriptBytes = input.getScriptBytes();
+			String rawScript = DatatypeConverter.printHexBinary(scriptBytes);
+			logger.info("time={}, event=tx_op, tx={}, block_height={}, raw_script={}", 
+					DateFormatter.format((block.getHeader().getTime())), tx.getHashAsString(), block.getHeight(), rawScript);
+			if(scriptBytes.length > 0 && "PUSHDATA2".equals(ScriptOpCodes.getOpCodeName(scriptBytes[0]))) {
+				logger.info("time={}, event=op_pushdata2, tx={}, block_height={}",
+						DateFormatter.format((block.getHeader().getTime())), tx.getHashAsString(), block.getHeight());
 			}
 			String in = String.format("is_coinbase=%s, from_address=%s, out_hash=%s, out_index=%s, out_value=%s", isCoinBase, fromAddress, out.getHash(), out.getIndex(), outValue);
 			inputs.add(in);
