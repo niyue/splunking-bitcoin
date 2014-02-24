@@ -1,6 +1,6 @@
 <dashboard>
   <label>btcdash</label>
-  <description/>
+  <description />
   <row>
     <panel>
       <table>
@@ -30,6 +30,7 @@
         <searchName>difficulty and hash rate</searchName>
       </chart>
     </panel>
+  </row>
   <row>
     <panel>
       <chart>
