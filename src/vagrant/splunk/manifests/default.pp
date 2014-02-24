@@ -21,13 +21,16 @@ firewall { '100 allow splunk access':
 # }
 
 file { 'bitcoinapp':
-  ensure  => link,
+  ensure  => directory,
   path    => '/opt/splunk/etc/apps/bitcoin',
-  target  => '/vagrant/splunk/apps/bitcoin',
+  source  => '/vagrant/splunk/apps/bitcoin',
+  mode    => 666,
+  recurse => true,
   require => Class['splunk'],
 }
 
 exec { 'restart-splunk':
-  command => '/opt/splunk/bin/splunk restart',
+  command => 'su - splunk -c "/opt/splunk/bin/splunk restart"',
+  path    => ['/bin'],
   require => File['bitcoinapp'],
 }

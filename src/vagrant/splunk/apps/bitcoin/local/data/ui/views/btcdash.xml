@@ -1,0 +1,71 @@
+<dashboard>
+  <label>btcdash</label>
+  <description/>
+  <row>
+    <panel>
+      <chart>
+        <title>difficulty and hash rate</title>
+        <searchName>difficulty and hash rate</searchName>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>the legendary pizza</title>
+        <searchName>pizza transaction</searchName>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>transactions during malleability attack</title>
+        <searchName>transactions during malleability attack</searchName>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>transaction malleability attack</title>
+        <searchName>transaction malleability attack</searchName>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>top 10 transaction fees</title>
+        <searchName>top 10 transaction fees</searchName>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>transaction fee per 48 hours</title>
+        <searchName>transaction fees per 48 hours</searchName>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>block chain height in last week</title>
+        <searchName>block chain height in last week</searchName>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>block chain height</title>
+        <searchName>block chain height</searchName>
+      </chart>
+    </panel>
+    <panel>
+      <single>
+        <searchName>best block chain height</searchName>
+        <title>best block chain height</title>
+        <earliestTime>-7d</earliestTime>
+        <latestTime>now</latestTime>
+        <option name="classField">high</option>
+      </single>
+    </panel>
+  </row>
+</dashboard>
