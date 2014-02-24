@@ -30,7 +30,6 @@ file { 'bitcoinapp':
 }
 
 exec { 'restart-splunk':
-  command => 'su - splunk -c "/opt/splunk/bin/splunk restart"',
-  path    => ['/bin'],
+  command => '/opt/splunk/bin/splunk restart',
   require => File['bitcoinapp'],
 }

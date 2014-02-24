@@ -3,14 +3,6 @@
   <description/>
   <row>
     <panel>
-      <chart>
-        <title>difficulty and hash rate</title>
-        <searchName>difficulty and hash rate</searchName>
-      </chart>
-    </panel>
-  </row>
-  <row>
-    <panel>
       <table>
         <title>the legendary pizza</title>
         <searchName>pizza transaction</searchName>
@@ -31,6 +23,13 @@
       </chart>
     </panel>
   </row>
+  <row>
+    <panel>
+      <chart>
+        <title>difficulty and hash rate</title>
+        <searchName>difficulty and hash rate</searchName>
+      </chart>
+    </panel>
   <row>
     <panel>
       <chart>
