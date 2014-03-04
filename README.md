@@ -33,10 +33,10 @@ To set it up (only verified under Mac OS X 10.9):
 Some reports
 =================
 * Transaction malleability attack visualized hour by hour
-![Transaction malleability attack visualized hour by hour](https://github.com/niyue/splunking-bitcoin/raw/master/static/images/tx_malleability_attack_hour_by_hour.png)
+![Transaction malleability attack visualized hour by hour](https://github.com/niyue/splunking-bitcoin/raw/master/src/static/images/tx_malleability_attack_hour_by_hour.png)
 
 * Transaction malleability attack prototype identified
-![Transaction malleability attack prototype identified](https://github.com/niyue/splunking-bitcoin/raw/master/static/images/tx_malleability_attack_close_look.png)
+![Transaction malleability attack prototype identified](https://github.com/niyue/splunking-bitcoin/raw/master/src/static/images/tx_malleability_attack_close_look.png)
 
 * Linear speed block chain height increasement
-![Linear speed block chain height increasement](https://github.com/niyue/splunking-bitcoin/raw/master/static/images/block_chain_height.png)
+![Linear speed block chain height increasement](https://github.com/niyue/splunking-bitcoin/raw/master/src/static/images/block_chain_height.png)
