@@ -43,3 +43,9 @@ Some reports
 
 * Top 10 transaction fees
 ![Top 10 tx fees](https://github.com/niyue/splunking-bitcoin/raw/master/src/static/images/top_ten_tx_fees.png)
+
+* Transaction fees per two days
+![Transaction fees per two days](https://github.com/niyue/splunking-bitcoin/raw/master/src/static/images/tx_fees_per_two_days.png)
+
+* Difficulty and hash rate
+![Difficulty and hash rate](https://github.com/niyue/splunking-bitcoin/raw/master/src/static/images/difficulty_and_hash_rate.png)
