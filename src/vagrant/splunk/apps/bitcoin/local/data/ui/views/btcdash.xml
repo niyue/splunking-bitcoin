@@ -53,12 +53,6 @@
       </chart>
     </panel>
     <panel>
-      <chart>
-        <title>block chain height</title>
-        <searchName>block chain height</searchName>
-      </chart>
-    </panel>
-    <panel>
       <single>
         <searchName>best block chain height</searchName>
         <title>best block chain height</title>

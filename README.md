@@ -29,3 +29,14 @@ To set it up (only verified under Mac OS X 10.9):
 	* Enter SPLUNKING_BITCOIN_HOME/src/vagrant directory, run "vagrant up"
 * That's it
 	* you can use your browser to nagivate to http://192.168.33.9:8000 (admin:999admin) to use Splunk Web to explore the data
+
+Some reports
+=================
+* Transaction malleability attack visualized hour by hour
+![Transaction malleability attack visualized hour by hour](static/images/tx_malleability_attack_hour_by_hour.png)
+
+* Transaction malleability attack prototype identified
+![Transaction malleability attack prototype identified](static/images/tx_malleability_attack_close_look.png)
+
+* Linear speed block chain height increasement
+![Linear speed block chain height increasement](static/images/block_chain_height.png)
