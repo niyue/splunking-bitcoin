@@ -40,3 +40,6 @@ Some reports
 
 * Linear speed block chain height increasement
 ![Linear speed block chain height increasement](https://github.com/niyue/splunking-bitcoin/raw/master/src/static/images/block_chain_height.png)
+
+* Top 10 transaction fees
+![Top 10 tx fees](https://github.com/niyue/splunking-bitcoin/raw/master/src/static/images/top_ten_tx_fees.png)
